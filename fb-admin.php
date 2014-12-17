@@ -20,7 +20,7 @@
 			<td><input style="width: 400px;" type="text" name="fbshare_appSecret" id="fbshare_appSecret" value="<?= get_option('fbshare_appSecret'); ?>" /></td>
 		</tr>
 		<tr>
-			<th>Facebook App Token <a href="<?= plugins_url( "fb-accesstoken.php")?>">here</a></th>
+			<th>Facebook App Token <a href="<?= plugins_url( "facebookshare/fb-accesstoken.php")?>">here</a></th>
 			<td><input style="width: 400px;" type="text" name="fbshare_token" id="fbshare_token" value="<?= get_option('fbshare_token'); ?>" /></td>
 		</tr>
 		<tr>
