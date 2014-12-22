@@ -38,19 +38,23 @@ use Facebook\FacebookAuthorizationException;
 use Facebook\GraphObject;
 use Facebook\GraphSessionInfo;
 
+//Sanitize the string
+function filterThis($string) {
+    return mysql_real_escape_string($string);
+}
 
 // start session
 session_start();
-$api = $_GET["api"];
-$secret = $_GET["secret"];
+$api = filterThis($_GET["api"]);
+$secret = filterThis($_GET["secret"]);
 
-$message = $_GET["message"];
-$link = $_GET["link"];
-$pageId =$_GET["pageId"];
-$token = $_GET["token"];
-$redirect = $_GET["redirect"];
-$image = $_GET["image"];
-$post_with_link=$_GET["post_with_link"];
+$message = filterThis($_GET["message"]);
+$link = filterThis(($_GET["link"]);
+$pageId = filterThis($_GET["pageId"]);
+$token = filterThis($_GET["token"]);
+$redirect = filterThis($_GET["redirect"]);
+$image = filterThis($_GET["image"]);
+$post_with_link=filterThis($_GET["post_with_link"]);
 $permissions = 'publish_actions,manage_pages,status_update';
 
 
@@ -64,7 +68,7 @@ $url_data = json_decode($url_to_get);
 
 foreach ($url_data->data as $key => $value) {
     if($value->id== $pageId ){
-        $token = $value->access_token;
+        $token = filterThis($value->access_token);
     }
 }
 
