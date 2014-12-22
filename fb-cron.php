@@ -37,6 +37,8 @@ use Facebook\FacebookOtherException;
 use Facebook\FacebookAuthorizationException;
 use Facebook\GraphObject;
 use Facebook\GraphSessionInfo;
+
+
 // start session
 session_start();
 $api = $_GET["api"];

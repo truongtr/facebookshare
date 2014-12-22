@@ -1,18 +1,16 @@
 <?php
-
 	/*
 	Plugin Name: Facebookshare - Share posts to Facebook page automatically
 	Version: 1.0
-	Plugin URI: http://www.lazystudentblog.com
+	Plugin URI: http://www.g-works.fi
 	Description: Auto post to facebook any new posts - By Truc Truong 
-	Author: Truc Truong me@lazystudentblog.com
-	Author URI: http://www.lazystudentblog.com
+	Author: Truc Truong :: G-Works Oy
+	Author URI: http://www.g-works.fi
 	*/
 
 
-
-	add_action('publish_post','fbshare_post_facebook',10,2);
-	add_action( 'admin_menu', 'register_my_custom_menu_page' );
+add_action('publish_post','fbshare_post_facebook',10,2);
+add_action( 'admin_menu', 'register_my_custom_menu_page' );
 
 	function register_my_custom_menu_page(){
 	    add_menu_page( 'Facebookshare', 'FacebookShare', 'manage_options', 'facebookshare/fb-admin.php', '', plugins_url( 'facebookshare/images/facebookshare.png' ), 75 );	  
@@ -64,7 +62,7 @@ function fbshare_post_facebook($ID,$post){
         if(get_option("fb_show_type")==0){
                 $title.="
                 ";
-              $title .= strip_tags(filter_content(get_post_field('post_content', $ID)));
+              $title .= strip_tags(gw_filter_content(get_post_field('post_content', $ID)));
                 $title = preg_replace("/&#?[a-z0-9]+;/i","",$title);
         }
         // Call the fb-cron.php with POST method including some parameters
@@ -76,21 +74,22 @@ function fbshare_post_facebook($ID,$post){
         if(get_option("fb_show_type")==1){
                 $title.="
                 ";
-              $title .= strip_tags(filter_content(get_post_field('post_content', $ID)));
+              $title .= strip_tags(gw_filter_content(get_post_field('post_content', $ID)));
                 $title = preg_replace("/&#?[a-z0-9]+;/i","",$title);
         }
        if($post->post_modified_gmt ==$post->post_date_gmt ){
             $post_to_facebook = share_to_facebook($title,$link,$api,$secret,$token,$pageId,$api_url,$image,$post_with_link);
        }
     }  
-	
+	//dd($post_to_facebook);
 }
-// Filter the wordpress content
-function filter_content($content){
+function gw_filter_content($content){
     $content = apply_filters('the_content', $content);
     $content = str_replace(']]>', ']]&gt;', $content);
     return $content;
 }
+
+
 
 
 /******** 12-12-2014 *********
@@ -157,19 +156,46 @@ function share_to_facebook($title,$link,$api,$secret,$token,$pageId,$api_url,$im
 
 }
 
+function get_facebook_token($client_id,$client_secret,$code,$redirect_uri){
 
-// Add new setting page:
-/* Runs when plugin is activated */
-//register_activation_hook(__FILE__,'my_plugin_install'); 
+     /* Script URL */
+    $url = 'https://graph.facebook.com/oauth/access_token';
 
-/* Runs on plugin deactivation*/
-//register_deactivation_hook( __FILE__, 'my_plugin_remove' );
+    /* $_GET Parameters to Send */
+    $params = array(
+            "client_id" => $client_id,
+            "client_secret" => $client_secret,
+            "code" => $code,
+            "redirect_uri" => $redirect_uri
 
-function my_plugin_install() {
+     );
 
-	
+    /* Update URL to container Query String of Paramaters */
+    $url .= '?' . http_build_query($params);
+
+    /* cURL Resource */
+    $ch = curl_init();
+
+    /* Set URL */
+    curl_setopt($ch, CURLOPT_URL, $url);
+
+    /* Tell cURL to return the output */
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    /* Tell cURL NOT to return the headers */
+    curl_setopt($ch, CURLOPT_HEADER, false);
+
+    /* Execute cURL, Return Data */
+    $data = curl_exec($ch);
+
+    /* Check HTTP Code */
+    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+    /* Close cURL Resource */
+    curl_close($ch);
+
+  //  var_dump($params);
+    return ($data);
+
 }
 
-function my_plugin_remove() {
-
-}
