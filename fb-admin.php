@@ -15,8 +15,8 @@ if($_GET["code"]!="" && strlen($_GET["code"])>10){
 	$access_token = $params['access_token'];
 	$expires = $params['expires'] + time();
 	if($access_token && $expires){
-		update_option( 'fbshare_token', $access_token);
-		update_option('fbshare_token_expire', $expires );
+		update_option( 'fbshare_token', sanitize_text_field($access_token));
+		update_option('fbshare_token_expire', sanitize_text_field($expires));
 	}
 }
 
@@ -33,11 +33,11 @@ $url = "https://www.facebook.com/dialog/oauth?client_id=".get_option('fbshare_ap
 
  if(isset($_POST['submit'])):
 
- 	update_option('fbshare_pageID',$_POST['fbshare_pageID']);
-	update_option('fbshare_appID',$_POST['fbshare_appID']);
-	update_option('fbshare_appSecret',$_POST['fbshare_appSecret']);
-	update_option('fbshare_token',$_POST['fbshare_token']);
-	update_option('fb_show_type',$_POST['fb_show_type']);
+ 	update_option('fbshare_pageID',sanitize_text_field($_POST['fbshare_pageID']));
+	update_option('fbshare_appID',sanitize_text_field($_POST['fbshare_appID']));
+	update_option('fbshare_appSecret',sanitize_text_field($_POST['fbshare_appSecret']));
+	update_option('fbshare_token',sanitize_text_field($_POST['fbshare_token']));
+	update_option('fb_show_type',sanitize_text_field($_POST['fb_show_type']));
 
 	echo '<div id="setting-error-settings_updated" class="updated settings-error"> 
 <p><strong>Settings saved!</strong></p></div>';
