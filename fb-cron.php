@@ -49,7 +49,7 @@ $api = filterThis($_GET["api"]);
 $secret = filterThis($_GET["secret"]);
 
 $message = filterThis($_GET["message"]);
-$link = filterThis(($_GET["link"]);
+$link = filterThis($_GET["link"]);
 $pageId = filterThis($_GET["pageId"]);
 $token = filterThis($_GET["token"]);
 $redirect = filterThis($_GET["redirect"]);
